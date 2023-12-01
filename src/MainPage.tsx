@@ -1,12 +1,23 @@
 import { Label } from "ui/label"
 import { SelectValue, SelectTrigger, SelectItem, SelectContent, Select } from "ui/select"
 import { Input } from "ui/input"
+import { ChangeEvent, useState } from "react";
 
 export default function MainPage() {
+  const [fromAmount, setFromAmount] = useState<string>("");
+  const [toAmount, setToAmount] = useState<string>("");
+
+  const changeFromAmount = (e: ChangeEvent<HTMLInputElement>) => {
+    const regex = /\D/g;
+    const rawValue: string = e.target.value;
+    const numValue: number = Number(rawValue.replaceAll(regex, ""));
+    setFromAmount(numValue.toLocaleString());
+ };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4 md:p-6">
       <section className="flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-md w-full max-w-md md:max-w-lg px-4 py-6">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">Gukbap Converter</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-4">Gukbap Converter</h1>
         <div className="grid grid-cols-2 gap-4 mb-4">
           <div className="col-span-1 ">
             <Label htmlFor="from-currency">From</Label>
@@ -25,7 +36,7 @@ export default function MainPage() {
           </div>
           <div className="col-span-1">
             <Label htmlFor="amount">Amount</Label>
-            <Input id="amount" placeholder="Enter amount" type="number" />
+            <Input id="amount" placeholder="Enter amount" type="text" value={fromAmount} onChange={changeFromAmount} />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -55,7 +66,7 @@ export default function MainPage() {
           <div className="col-span-1 mb-4">
             <Label htmlFor="amount">Amount</Label>
             <div className="bg-blue-100 dark:bg-blue-900 p-2 rounded-md text-blue-800 dark:text-blue-200 text-left">
-              -
+              {toAmount.length != 0 ? toAmount : "-"}
             </div>
           </div>
         </div>
